@@ -46,3 +46,6 @@ def load_all_variables(variable_names=None):
 
     for var in auto_load_var_names:
         _load_variable(var)
+
+    print 'Loaded the following variables:', (
+        variable_names or auto_load_var_names)
