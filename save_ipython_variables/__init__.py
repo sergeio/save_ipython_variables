@@ -51,9 +51,7 @@ def load_all_variables(variable_names=None):
     if variable_names:
         return load_all_and_print(variable_names)
 
-    try:
-        _load_variable('auto_load_var_names')
-    except IOError:
+    if not _load_variable('auto_load_var_names'):
         raise IOError('No variables saved in `auto_load_var_names`.')
 
     return load_all_and_print(auto_load_var_names)
