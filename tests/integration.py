@@ -6,6 +6,11 @@ import pickle
 from save_ipython_variables import save_variable, load_all_variables
 
 
+def remove_all_pickle_files():
+    pkl_files = glob('*.pkl')
+    for f in pkl_files:
+        remove(f)
+
 ####
 ##
 ## save_variable
@@ -15,16 +20,11 @@ from save_ipython_variables import save_variable, load_all_variables
 class _BaseSavingVariableTestCase(TestCase):
 
     def setUp(self):
-        self.remove_all_pickle_files()
+        remove_all_pickle_files()
         self.execute()
 
     def tearDown(self):
-        self.remove_all_pickle_files()
-
-    def remove_all_pickle_files(cls):
-        pkl_files = glob('*.pkl')
-        for f in pkl_files:
-            remove(f)
+        remove_all_pickle_files()
 
 
 class WhenSavingVariableWithAutoLoad(_BaseSavingVariableTestCase):
@@ -76,6 +76,93 @@ class WhenSavingVariableWithoutAutoLoad(_BaseSavingVariableTestCase):
 
     def test_variable_2_exists_on_disk(self):
         self.assertTrue(path.exists('saving_variable_test_var_2.pkl'))
+
+
+####
+##
+## load_all_variables
+##
+####
+
+class _BaseLoadingAllVariablesTestCase(TestCase):
+
+    def setUp(self):
+        remove_all_pickle_files()
+        self.configure()
+        self.execute()
+
+
+class WhenLoadingAllVariablesNoArgs(_BaseLoadingAllVariablesTestCase):
+
+    def configure(self):
+        pickle.dump(5, open('loading_variable_test_var_1.pkl', 'wb'))
+        pickle.dump(
+            set(['loading_variable_test_var_1']),
+            open('auto_load_var_names.pkl', 'wb'),
+        )
+
+    def execute(self):
+        load_all_variables()
+
+    def tearDown(self):
+        remove_all_pickle_files()
+        del __builtins__['auto_load_var_names']
+
+    def test_loads_var_1(self):
+        self.assertEqual(loading_variable_test_var_1, 5)
+
+    def test_loads_auto_load_var_names_into_builtins(self):
+        self.assertTrue('auto_load_var_names' in __builtins__)
+
+    def test_auto_load_var_names_has_correct_value(self):
+        self.assertEqual(
+            auto_load_var_names,
+            set(['loading_variable_test_var_1']),
+        )
+
+
+class WhenLoadingAllVariablesWithArgs(_BaseLoadingAllVariablesTestCase):
+
+    def configure(self):
+        pickle.dump(5, open('loading_variable_test_var_1.pkl', 'wb'))
+        pickle.dump(6, open('loading_variable_test_var_2.pkl', 'wb'))
+        pickle.dump(
+            set(['loading_variable_test_var_1']),
+            open('auto_load_var_names.pkl', 'wb'),
+        )
+
+    def execute(self):
+        load_all_variables(['loading_variable_test_var_1'])
+
+    def tearDown(self):
+        remove_all_pickle_files()
+
+    def test_loads_var_1(self):
+        self.assertEqual(loading_variable_test_var_1, 5)
+
+    def test_loads_auto_load_var_names(self):
+        self.assertFalse('auto_load_var_names' in __builtins__)
+
+    def test_does_not_load_var_2(self):
+        self.assertRaises(NameError, lambda: loading_variable_test_var_2)
+
+    def test_var_2_not_in_builtins(self):
+        self.assertFalse('loading_variable_test_var_2' in __builtins__)
+
+
+class WhenLoadingAllVariablesNothingToLoad(_BaseLoadingAllVariablesTestCase):
+
+    def configure(self):
+        pass
+
+    def execute(self):
+        pass
+
+    def tearDown(self):
+        remove_all_pickle_files()
+
+    def test_raises_IOError(self):
+        self.assertRaises(IOError, load_all_variables)
 
 
 if __name__ == '__main__':
