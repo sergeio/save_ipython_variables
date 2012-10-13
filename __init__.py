@@ -20,12 +20,21 @@ def save_variable(name, var, auto_load=True):
 
 
 def _load_variable(name):
-    """Loads the variable :param name: from its pickled state as a builtin."""
+    """Loads the variable :param name: from its pickled state as a builtin.
+
+    Returns whether loading variable went successfully.
+
+    """
     if not isinstance(name, basestring):
         raise TypeError('Argument should be a string.')
     cmd = '__builtins__["{name}"] = pickle.load(open("{name}.pkl", "rb"))'\
         .format(name=name)
-    exec cmd
+
+    try:
+        exec cmd
+    except IOError:
+        return False
+    return True
 
 
 def load_all_variables(variable_names=None):
