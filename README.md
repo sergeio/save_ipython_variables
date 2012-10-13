@@ -33,6 +33,7 @@ And now, in a new session:
 In [1]: from save_ipython_variables import load_all_variables, save_variable
 
 In [2]: load_all_variables()
+Loaded the following variables: ['data', 'number']
 
 In [3]: if data:
    ...:     print 'Loaded Successfully!'
@@ -43,6 +44,7 @@ You can also choose to load select variables:
 In [1]: from save_ipython_variables import load_all_variables, save_variable
 
 In [2]: load_all_variables(['number'])
+Loaded the following variables: ['number']
 
 In [3]: number
 Out[3]: 5

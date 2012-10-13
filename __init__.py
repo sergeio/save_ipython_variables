@@ -44,18 +44,16 @@ def load_all_variables(variable_names=None):
     `auto_load_var_names`.
 
     """
+    def load_all_and_print(variables):
+        names_loaded_successfully = filter(_load_variable, variables)
+        print 'Loaded the following variables:', names_loaded_successfully
+
     if variable_names:
-        for var in variable_names:
-            _load_variable(var)
-        return
+        return load_all_and_print(variable_names)
 
     try:
         _load_variable('auto_load_var_names')
     except IOError:
         raise IOError('No variables saved in `auto_load_var_names`.')
 
-    for var in auto_load_var_names:
-        _load_variable(var)
-
-    print 'Loaded the following variables:', (
-        variable_names or auto_load_var_names)
+    return load_all_and_print(auto_load_var_names)
