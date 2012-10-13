@@ -13,7 +13,7 @@ def save_variable(name, var, auto_load=True):
         load_all_variables(['auto_load_var_names'])
         __builtins__.setdefault('auto_load_var_names', [])
         auto_load_var_names = __builtins__.get('auto_load_var_names')
-        auto_load_var_names.append(name)
+        auto_load_var_names.add(name)
     pickle.dump(var, open(name + '.pkl', 'wb'))
     pickle.dump(auto_load_var_names, open('auto_load_var_names.pkl', 'wb'))
 
