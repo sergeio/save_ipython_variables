@@ -25,8 +25,6 @@ def _load_variable(name):
     Returns whether loading variable went successfully.
 
     """
-    if not isinstance(name, basestring):
-        raise TypeError('Argument should be a string.')
     cmd = '__builtins__["{name}"] = pickle.load(open("{name}.pkl", "rb"))'\
         .format(name=name)
 
