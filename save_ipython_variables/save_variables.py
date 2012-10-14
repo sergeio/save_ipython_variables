@@ -10,11 +10,11 @@ def save_variable(name, var, auto_load=True):
 
     """
     if auto_load:
-        if not _load_variable('auto_load_var_names'):
-            __builtins__.setdefault('auto_load_var_names', set())
-        auto_load_var_names = __builtins__.get('auto_load_var_names')
-        auto_load_var_names.add(name)
-        pickle.dump(auto_load_var_names, open('auto_load_var_names.pkl', 'wb'))
+        if not _load_variable('saved_var_names'):
+            __builtins__.setdefault('saved_var_names', set())
+        saved_var_names = __builtins__.get('saved_var_names')
+        saved_var_names.add(name)
+        pickle.dump(saved_var_names, open('saved_var_names.pkl', 'wb'))
 
     pickle.dump(var, open(name + '.pkl', 'wb'))
 
@@ -39,7 +39,7 @@ def load_all_variables(variable_names=None):
     """Loads all variables :param variable_names: into the __builtins__ scope.
 
     If :param variable_names: is `None`, load all variables stored in the list
-    `auto_load_var_names`.
+    `saved_var_names`.
 
     """
     def load_all_and_print(variables):
@@ -49,7 +49,7 @@ def load_all_variables(variable_names=None):
     if variable_names:
         return load_all_and_print(variable_names)
 
-    if not _load_variable('auto_load_var_names'):
-        raise IOError('No variables saved in `auto_load_var_names`.')
+    if not _load_variable('saved_var_names'):
+        raise IOError('No variables saved in `saved_var_names`.')
 
-    return load_all_and_print(auto_load_var_names)
+    return load_all_and_print(saved_var_names)

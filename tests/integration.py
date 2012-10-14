@@ -10,8 +10,8 @@ def remove_all_pickle_files():
     pkl_files = glob('test_*.pkl')
     for f in pkl_files:
         remove(f)
-    if path.exists('auto_load_var_names.pkl'):
-        remove('auto_load_var_names.pkl')
+    if path.exists('saved_var_names.pkl'):
+        remove('saved_var_names.pkl')
 
 
 ####
@@ -42,8 +42,8 @@ class WhenSavingVariableWithAutoLoad(_BaseSavingVariableTestCase):
     def test_variable_2_exists_on_disk(self):
         self.assertTrue(path.exists('test_saving_variable_var_2.pkl'))
 
-    def test_auto_load_var_names_exists_on_disk(self):
-        self.assertTrue(path.exists('auto_load_var_names.pkl'))
+    def test_saved_var_names_exists_on_disk(self):
+        self.assertTrue(path.exists('saved_var_names.pkl'))
 
     def test_variable_3_does_not_exist_on_disk(self):
         self.assertFalse(path.exists('test_saving_variable_var_3.pkl'))
@@ -56,8 +56,8 @@ class WhenSavingVariableWithAutoLoad(_BaseSavingVariableTestCase):
         var_2 = pickle.load(open('test_saving_variable_var_2.pkl', 'rb'))
         self.assertEqual(var_2, 5)
 
-    def test_value_auto_load_var_names(self):
-        variable_set = pickle.load(open('auto_load_var_names.pkl', 'rb'))
+    def test_value_saved_var_names(self):
+        variable_set = pickle.load(open('saved_var_names.pkl', 'rb'))
         self.assertEqual(
             variable_set,
             set(('test_saving_variable_var_1', 'test_saving_variable_var_2')),
@@ -70,8 +70,8 @@ class WhenSavingVariableWithoutAutoLoad(_BaseSavingVariableTestCase):
         save_variable('test_saving_variable_var_1', 3, auto_load=False)
         save_variable('test_saving_variable_var_2', 5, auto_load=False)
 
-    def test_auto_load_var_names_does_not_exist_on_disk(self):
-        self.assertFalse(path.exists('auto_load_var_names.pkl'))
+    def test_saved_var_names_does_not_exist_on_disk(self):
+        self.assertFalse(path.exists('saved_var_names.pkl'))
 
     def test_variable_1_exists_on_disk(self):
         self.assertTrue(path.exists('test_saving_variable_var_1.pkl'))
@@ -100,7 +100,7 @@ class WhenLoadingAllVariablesNoArgs(_BaseLoadingAllVariablesTestCase):
         pickle.dump(5, open('test_loading_variable_var_1.pkl', 'wb'))
         pickle.dump(
             set(['test_loading_variable_var_1']),
-            open('auto_load_var_names.pkl', 'wb'),
+            open('saved_var_names.pkl', 'wb'),
         )
 
     def execute(self):
@@ -108,17 +108,17 @@ class WhenLoadingAllVariablesNoArgs(_BaseLoadingAllVariablesTestCase):
 
     def tearDown(self):
         remove_all_pickle_files()
-        del __builtins__['auto_load_var_names']
+        del __builtins__['saved_var_names']
 
     def test_loads_var_1(self):
         self.assertEqual(test_loading_variable_var_1, 5)
 
-    def test_loads_auto_load_var_names_into_builtins(self):
-        self.assertTrue('auto_load_var_names' in __builtins__)
+    def test_loads_saved_var_names_into_builtins(self):
+        self.assertTrue('saved_var_names' in __builtins__)
 
-    def test_auto_load_var_names_has_correct_value(self):
+    def test_saved_var_names_has_correct_value(self):
         self.assertEqual(
-            auto_load_var_names,
+            saved_var_names,
             set(['test_loading_variable_var_1']),
         )
 
@@ -130,7 +130,7 @@ class WhenLoadingAllVariablesWithArgs(_BaseLoadingAllVariablesTestCase):
         pickle.dump(6, open('test_loading_variable_var_2.pkl', 'wb'))
         pickle.dump(
             set(['test_loading_variable_var_1']),
-            open('auto_load_var_names.pkl', 'wb'),
+            open('saved_var_names.pkl', 'wb'),
         )
 
     def execute(self):
@@ -142,8 +142,8 @@ class WhenLoadingAllVariablesWithArgs(_BaseLoadingAllVariablesTestCase):
     def test_loads_var_1(self):
         self.assertEqual(test_loading_variable_var_1, 5)
 
-    def test_loads_auto_load_var_names(self):
-        self.assertFalse('auto_load_var_names' in __builtins__)
+    def test_loads_saved_var_names(self):
+        self.assertFalse('saved_var_names' in __builtins__)
 
     def test_does_not_load_var_2(self):
         self.assertRaises(NameError, lambda: test_loading_variable_var_2)
