@@ -1,4 +1,4 @@
-save-ipython-variables
+Save IPython Variables
 ======================
 
 You use IPython.  It's pretty great.  But things happen!  Your computer
@@ -8,7 +8,8 @@ and potentially hours of work.
 
 Sure, you can work out of a file, using `%edit` to keep your code on disk, but
 the variables that can take hours to build up -- whether it's through querying
-databases, scraping the web, or long-running algorithms -- can just vanish.
+databases, scraping the web, or executing long-running algorithms -- can just
+vanish.
 
 This is where this module comes into play: `save-ipython-variables` lets you do
 just that -- save your global IPython variables to disk easily, and load them
