@@ -1,3 +1,4 @@
+from os import path
 import pickle
 
 
@@ -25,13 +26,11 @@ def _load_variable(name):
     Returns whether loading variable went successfully.
 
     """
-    cmd = '__builtins__["{name}"] = pickle.load(open("{name}.pkl", "rb"))'\
-        .format(name=name)
-
-    try:
-        exec cmd
-    except IOError:
+    filename = name + '.pkl'
+    if not path.exists(filename):
         return False
+
+    __builtins__[name] = pickle.load(open(filename, 'rb'))
     return True
 
 
