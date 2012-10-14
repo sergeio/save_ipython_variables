@@ -58,3 +58,12 @@ NameError                                 Traceback (most recent call last)
 NameError: name 'data' is not defined
 ```
 As you can see, `number` was successfully loaded, but `data` was ignored.
+
+Details
+-------
+Each variable is saved to disk in the current directory as
+`<variable_name>.pkl`.  Variable names are also added to the set
+`saved_var_names`, which is saved to disk like all other variables.
+
+Variables are loaded into scope by adding them to the `__builtins__`
+dictionary.
