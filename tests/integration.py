@@ -3,7 +3,11 @@ from glob import glob
 from unittest import TestCase, main
 import pickle
 
-from save_ipython_variables import save_variable, load_all_variables
+from save_ipython_variables import (
+    load_all_variables,
+    load_variables,
+    save_variable,
+)
 
 
 def remove_all_pickle_files():
@@ -165,6 +169,21 @@ class WhenLoadingAllVariablesNothingToLoad(_BaseLoadingAllVariablesTestCase):
 
     def test_raises_IOError(self):
         self.assertRaises(IOError, load_all_variables)
+
+####
+##
+## load_variables
+##
+####
+
+
+class WhenLoadingVariables(WhenLoadingAllVariablesWithArgs):
+    """Test is same as the parent class, but calls the more natural sounding
+    name in this context.
+
+    """
+    def execute(self):
+        load_variables(['test_loading_variable_var_1'])
 
 
 if __name__ == '__main__':

@@ -38,6 +38,11 @@ def _load_variable(name):
     return True
 
 
+def load_variables(variable_names):
+    """Load :param variable_names: into the __builtins__ scope."""
+    return load_all_variables(variable_names=variable_names)
+
+
 def load_all_variables(variable_names=None):
     """Loads all variables :param variable_names: into the __builtins__ scope.
 
