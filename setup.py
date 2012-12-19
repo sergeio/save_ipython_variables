@@ -10,7 +10,7 @@ def read(fname):
 def run_setup():
     setup(
         name='save_ipython_variables',
-        version='0.0.3',
+        version='0.0.4',
         description='A tool for saving your IPython variables to disk.',
         keywords = '',
         url='https://github.com/sergeio/save_ipython_variables',
