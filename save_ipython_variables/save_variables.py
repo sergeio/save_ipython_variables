@@ -2,12 +2,15 @@ from os import path
 import pickle
 
 
-def save_variable(name, var, auto_load=True):
+def save_variable(name, var, auto_load=True, protocol=-1):
     """Saves :param var: to a pickle file, named :param name:.
 
     :param auto_load: decides if the variable should be added to the list of
         variables that will be auto-loadable by :method load_all_variables:.
         Defaults to true.
+
+    :param protocol: how much should the variable be compressed? Defaults to
+        -1, meaning as much compression as possible.
 
     """
     if auto_load:
@@ -15,7 +18,8 @@ def save_variable(name, var, auto_load=True):
             __builtins__.setdefault('saved_var_names', set())
         saved_var_names = __builtins__.get('saved_var_names')
         saved_var_names.add(name)
-        pickle.dump(saved_var_names, open('saved_var_names.pkl', 'wb'))
+        write_file = open('saved_var_names.pkl', 'wb')
+        pickle.dump(saved_var_names, write_file, protocol=protocol)
 
     pickle.dump(var, open(name + '.pkl', 'wb'))
 
